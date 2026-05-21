@@ -128,6 +128,44 @@ body::before {
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 
+/* Prose / inline links — give them a clear, animated affordance */
+.about-text a,
+.edu-details a,
+.project-desc a,
+.contact-intro a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  transition: text-decoration-thickness 0.18s ease, text-decoration-color 0.18s ease;
+}
+
+.about-text a:hover,
+.edu-details a:hover,
+.project-desc a:hover,
+.contact-intro a:hover {
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--accent);
+}
+
+/* Heading-level links (school names) — quieter, reveal on hover */
+.edu-school a {
+  transition: color 0.2s;
+}
+.edu-school a:hover { color: var(--accent); }
+
+/* Visible keyboard focus for accessibility + polish */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+.theme-toggle:focus-visible,
+.filter-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
 /* ── NAV ─────────────────────────────────────────── */
 #navbar {
   position: fixed;
@@ -282,14 +320,27 @@ h1 em {
   flex-direction: column;
   justify-content: center;
   padding: 5rem var(--gutter);
-  gap: 2rem;
+  gap: 1.75rem;
 }
 
 .particle-wrap {
   width: 100%;
   aspect-ratio: 1;
-  max-width: 420px;
+  max-width: 440px;
 }
+
+.hero-caption {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 440px;
+  margin-top: -0.5rem;
+}
+
+.hero-caption .accent { color: var(--accent); }
 
 .particle-wrap canvas {
   width: 100%;
@@ -335,15 +386,36 @@ section {
 .section-header {
   display: flex;
   align-items: baseline;
-  gap: 1.25rem;
+  gap: 1.5rem;
   margin-bottom: 3rem;
 }
 
 .section-num {
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  color: var(--red);
-  letter-spacing: 0.1em;
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+  color: color-mix(in srgb, var(--ink) 16%, transparent);
+  font-feature-settings: "tnum";
+}
+
+/* hairline that fills the remaining header width */
+.section-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  align-self: center;
+  margin-left: 0.25rem;
+  background: var(--rule);
+}
+
+/* Contact section sits on a dark panel — lift the rule + numeral */
+.contact-section .section-header::after {
+  background: rgba(245, 240, 232, 0.16);
+}
+.contact-num {
+  color: color-mix(in srgb, var(--red) 70%, transparent) !important;
 }
 
 h2 {
@@ -451,19 +523,25 @@ h2 {
 /* ── SKILLS ──────────────────────────────────────── */
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.25rem;
+  align-items: start;
 }
+
+@media (max-width: 860px) { .skills-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .skills-grid { grid-template-columns: 1fr; } }
 
 .skill-card {
   border: 1px solid var(--rule);
+  border-top: 2px solid var(--rule);
   padding: 1.5rem;
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color 0.2s, border-top-color 0.2s, transform 0.2s;
 }
 
 .skill-card:hover {
   border-color: var(--accent);
-  transform: translateY(-2px);
+  border-top-color: var(--accent);
+  transform: translateY(-3px);
 }
 
 .skill-card-title {
