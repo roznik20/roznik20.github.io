@@ -70,15 +70,29 @@ body, #navbar, section, .skill-card, footer {
   transition: background 0.25s, color 0.25s, border-color 0.25s;
 }
 
-/* ── PHOTOGRAPHY NAV LINK ────────────────────────── */
+/* ── NAV: SECTION LINKS vs SEPARATE PAGE ─────────── */
+/* Vertical divider separating in-page anchors from the Photography page */
+.nav-sep {
+  width: 1px;
+  height: 18px;
+  align-self: center;
+  background: var(--rule);
+}
+
+/* Photography lives on its own page — give it a distinct boxed "external" treatment */
 .nav-links a.nav-external {
-  border: 1px solid var(--rule);
-  padding: 0.2rem 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: 2px;
+  padding: 0.28rem 0.7rem;
   color: var(--accent);
   transition: color 0.2s, border-color 0.2s, background 0.2s;
 }
 
-.nav-links a.nav-external:hover {
+.nav-links a.nav-external:hover,
+.nav-links a.nav-external.active {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--paper);
@@ -95,6 +109,7 @@ body, #navbar, section, .skill-card, footer {
   text-transform: uppercase;
   color: var(--muted);
   padding: 0.3rem 0.7rem;
+  margin-left: 2rem;
   transition: color 0.2s, border-color 0.2s;
 }
 
@@ -192,7 +207,9 @@ button:focus-visible,
 
 .nav-links {
   display: flex;
-  gap: 2.2rem;
+  align-items: center;
+  gap: 2rem;
+  margin-left: auto;   /* group links + toggle to the right, logo stays left */
 }
 
 .nav-links a {
@@ -724,7 +741,9 @@ footer span {
   .nav-links {
     display: none;
     flex-direction: column;
+    align-items: stretch;
     gap: 0;
+    margin-left: 0;
     position: absolute;
     top: var(--nav-h);
     left: 0; right: 0;
@@ -736,10 +755,27 @@ footer span {
 
   .nav-links li { border-bottom: 1px solid var(--rule); }
 
+  /* divider is meaningless in the stacked menu */
+  .nav-sep { display: none; }
+
   .nav-links a {
     display: block;
     padding: 0.9rem var(--gutter);
     font-size: 0.75rem;
+  }
+
+  /* let Photography read as a normal menu row, but keep its accent colour */
+  .nav-links a.nav-external {
+    display: block;
+    border: none;
+    border-radius: 0;
+    padding: 0.9rem var(--gutter);
+    color: var(--accent);
+  }
+  .nav-links a.nav-external:hover,
+  .nav-links a.nav-external.active {
+    background: none;
+    color: var(--accent);
   }
 
   .burger { display: flex; }
