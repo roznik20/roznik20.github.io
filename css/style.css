@@ -13,6 +13,7 @@
   --serif:   'EB Garamond', Georgia, serif;
   --mono:    'Space Mono', monospace;
   --nav-h:   58px;
+  --ease:    cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ── DARK MODE ───────────────────────────────────── */
@@ -127,6 +128,28 @@ body {
   line-height: 1.65;
   color: var(--ink);
   background: var(--paper);
+}
+
+/* branded text selection */
+::selection {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+/* refined scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--muted) 55%, transparent) transparent;
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--muted) 45%, transparent);
+  border: 3px solid var(--paper);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--accent) 60%, transparent);
 }
 
 /* paper noise texture */
@@ -402,6 +425,12 @@ section {
   border-top: 1px solid var(--rule);
 }
 
+/* Tonal rhythm — alternating sections sit on a faint surface so the long
+   single-column scroll reads as chunks rather than one undifferentiated sheet */
+section.tint {
+  background: var(--surface);
+}
+
 .section-header {
   display: flex;
   align-items: baseline;
@@ -456,6 +485,15 @@ h2 {
   margin-bottom: 1.2rem;
   line-height: 1.85;
 }
+
+/* Lede — the opening paragraph carries more weight to lead the eye in */
+.about-text p.lede {
+  font-size: 1.4rem;
+  line-height: 1.55;
+  color: var(--ink);
+  margin-bottom: 1.6rem;
+}
+.about-text p.lede strong { font-weight: 600; }
 
 .about-text p strong { color: var(--ink); font-weight: 600; }
 
@@ -537,7 +575,28 @@ h2 {
   margin-top: 0.6rem;
 }
 
-.edu-badge--red { background: var(--red); }
+/* "live / now" badge — red with a pulsing dot */
+.edu-badge--red {
+  background: var(--red);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.edu-badge--red::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff;
+  animation: livePulse 2s ease-in-out infinite;
+}
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.8); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .edu-badge--red::before { animation: none; }
+}
 
 /* ── SKILLS ──────────────────────────────────────── */
 .skills-grid {
@@ -554,7 +613,7 @@ h2 {
   border: 1px solid var(--rule);
   border-top: 2px solid var(--rule);
   padding: 1.5rem;
-  transition: border-color 0.2s, border-top-color 0.2s, transform 0.2s;
+  transition: border-color 0.2s var(--ease), border-top-color 0.2s var(--ease), transform 0.3s var(--ease);
 }
 
 .skill-card:hover {
