@@ -56,6 +56,21 @@
       line-height: 1.8;
     }
 
+    .photo-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.4rem;
+      margin-top: 1.8rem;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .photo-hero-meta span { display: inline-flex; align-items: baseline; gap: 0.45rem; }
+    .photo-hero-meta b { font-weight: 700; color: var(--accent); }
+
     /* ── FILTER BAR ──────────────────────────────────── */
     .filter-bar {
       padding: 1.5rem var(--gutter);
@@ -105,15 +120,19 @@
     }
 
     .photo-category-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
       font-family: var(--mono);
       font-size: 0.65rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--rule);
     }
+
+    .photo-category-label .cat { color: var(--red); }
+    .photo-category-label .rule { flex: 1; height: 1px; background: var(--rule); }
+    .photo-category-label .count { color: var(--muted); letter-spacing: 0.1em; }
 
     .photo-grid {
       columns: 3 300px;
@@ -369,6 +388,7 @@
     <p class="photo-hero-label">Personal Work</p>
     <h1>Photography</h1>
     <p>A collection of photographs taken during travels, late nights under the stars, and quiet moments in between.</p>
+    <div class="photo-hero-meta" id="photo-hero-meta"></div>
   </div>
 
   <!-- FILTER BAR -->
@@ -447,13 +467,28 @@
       // Sort by date descending
       allPhotos.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
+      buildHeroMeta();
       buildFilters();
       renderGallery('all');
+    }
+
+    function buildHeroMeta() {
+      const el = document.getElementById('photo-hero-meta');
+      if (!el) return;
+      const count = allPhotos.length;
+      const locations = new Set(allPhotos.map(p => p.location).filter(Boolean)).size;
+      const parts = [`<span><b>${count}</b> ${count === 1 ? 'Photograph' : 'Photographs'}</span>`];
+      if (locations) parts.push(`<span><b>${locations}</b> ${locations === 1 ? 'Location' : 'Locations'}</span>`);
+      el.innerHTML = parts.join('');
     }
 
     function buildFilters() {
       const bar = document.getElementById('filter-bar');
       const categories = [...new Set(allPhotos.map(p => p.category).filter(Boolean))];
+
+      // A single category makes "All / x" redundant — hide the whole bar
+      if (categories.length <= 1) { bar.style.display = 'none'; return; }
+
       categories.forEach(cat => {
         const btn = document.createElement('button');
         btn.className = 'filter-btn';
@@ -498,10 +533,18 @@
           groups[cat].push(p);
         });
 
-        Object.entries(groups).forEach(([cat, photos]) => {
+        const entries = Object.entries(groups);
+        const showLabels = entries.length > 1;   // one category needs no header
+        entries.forEach(([cat, photos]) => {
           const section = document.createElement('div');
           section.className = 'photo-section';
-          section.innerHTML = `<p class="photo-category-label">${cat}</p>`;
+          if (showLabels) {
+            const n = photos.length;
+            section.innerHTML =
+              `<p class="photo-category-label"><span class="cat">${cat}</span>` +
+              `<span class="rule"></span>` +
+              `<span class="count">${n} ${n === 1 ? 'Photograph' : 'Photographs'}</span></p>`;
+          }
           section.appendChild(buildGrid(photos));
           gallery.appendChild(section);
         });
