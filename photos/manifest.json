@@ -6,7 +6,9 @@
     "date": "2026-03",
     "category": "day",
     "camera": "FUJIFILM X100VI",
-    "exif": "23mm · f/5.6 · 1/800s · ISO 250"
+    "exif": "23mm · f/5.6 · 1/800s · ISO 250",
+    "w": 4870,
+    "h": 6087
   },
   {
     "file": "DSF5838.jpg",
@@ -15,7 +17,9 @@
     "date": "2026-03",
     "category": "day",
     "camera": "FUJIFILM X100VI",
-    "exif": "23mm · f/3.2 · 1/180s · ISO 250"
+    "exif": "23mm · f/3.2 · 1/180s · ISO 250",
+    "w": 4931,
+    "h": 7396
   },
   {
     "file": "manta.jpg",
@@ -24,6 +28,8 @@
     "date": "",
     "category": "day",
     "camera": "",
-    "exif": ""
+    "exif": "",
+    "w": 3984,
+    "h": 2988
   }
 ]

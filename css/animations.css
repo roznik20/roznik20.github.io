@@ -15,3 +15,14 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Accessibility: don't hide content or animate for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hero-left > * { animation: none; }
+}

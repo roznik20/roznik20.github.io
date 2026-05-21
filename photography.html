@@ -4,6 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Photography — Nikita Rozanov</title>
+  <meta name="description" content="Photography by Nikita Rozanov — travels, late nights under the stars, and quiet moments in between." />
+  <meta name="author" content="Nikita Rozanov" />
+  <link rel="canonical" href="https://nikitarozanov.com/photography.html" />
+  <meta name="theme-color" content="#1a3d8f" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+  <!-- Open Graph / social share -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Nikita Rozanov" />
+  <meta property="og:title" content="Photography — Nikita Rozanov" />
+  <meta property="og:description" content="Travels, late nights under the stars, and quiet moments in between." />
+  <meta property="og:url" content="https://nikitarozanov.com/photography.html" />
+  <meta property="og:image" content="https://nikitarozanov.com/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://nikitarozanov.com/assets/og.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -98,9 +116,8 @@
     }
 
     .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
+      columns: 3 300px;
+      column-gap: 1rem;
       margin-bottom: 3rem;
     }
 
@@ -109,19 +126,29 @@
       overflow: hidden;
       cursor: pointer;
       background: var(--surface);
-      aspect-ratio: 4/3;
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
+      break-inside: avoid;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .photo-card.in {
+      opacity: 1;
+      transform: none;
     }
 
     .photo-card img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
       display: block;
-      transition: transform 0.4s ease;
+      transition: transform 0.5s ease;
     }
 
     .photo-card:hover img {
-      transform: scale(1.03);
+      transform: scale(1.04);
     }
 
     .photo-card-overlay {
@@ -194,16 +221,54 @@
       display: flex;
     }
 
+    #lightbox-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 100%;
+      max-height: 80vh;
+    }
+
     #lightbox img {
       max-width: 100%;
       max-height: 80vh;
       object-fit: contain;
       display: block;
+      opacity: 1;
+      transition: opacity 0.25s ease;
     }
+
+    #lightbox-stage.loading img { opacity: 0; }
+
+    .lb-spinner {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      border: 2px solid rgba(245,240,232,0.2);
+      border-top-color: rgba(245,240,232,0.7);
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+      animation: lb-spin 0.7s linear infinite;
+    }
+
+    #lightbox-stage.loading .lb-spinner { opacity: 1; }
+
+    @keyframes lb-spin { to { transform: rotate(360deg); } }
 
     #lightbox-caption {
       margin-top: 1rem;
       text-align: center;
+    }
+
+    #lb-count {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      color: rgba(245,240,232,0.4);
+      margin-bottom: 0.5rem;
     }
 
     #lightbox-caption strong {
@@ -266,7 +331,12 @@
     }
 
     @media (max-width: 520px) {
-      .photo-grid { grid-template-columns: 1fr; }
+      .photo-grid { columns: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .photo-card { opacity: 1; transform: none; transition: none; }
+      .photo-card:hover img { transform: none; }
     }
   </style>
 </head>
@@ -315,8 +385,12 @@
       <button class="lightbox-arrow" id="lb-prev">&#8592;</button>
       <button class="lightbox-arrow" id="lb-next">&#8594;</button>
     </div>
-    <img id="lightbox-img" src="" alt="" />
+    <div id="lightbox-stage">
+      <div class="lb-spinner"></div>
+      <img id="lightbox-img" src="" alt="" />
+    </div>
     <div id="lightbox-caption">
+      <span id="lb-count"></span>
       <strong id="lb-title"></strong>
       <span id="lb-meta"></span>
       <span id="lb-exif" style="display:block;margin-top:0.3rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.08em;color:rgba(245,240,232,0.3);"></span>
@@ -332,18 +406,34 @@
   <script>
     /*
      * HOW TO ADD PHOTOS:
-     * 1. Drop your image files into the /photos/ folder
-     * 2. Add an entry to /photos/manifest.json with:
-     *    - "file":     filename (e.g. "aurora.jpg")
+     * 1. Drop the full-size image into /photos/  (e.g. aurora.jpg)
+     * 2. Generate the web-sized versions (run from /photos/):
+     *      cwebp -q 78 -resize 0 760  aurora.jpg -o thumb/aurora.webp   # portrait
+     *      cwebp -q 82 -resize 0 2000 aurora.jpg -o medium/aurora.webp
+     *    (for landscape photos use -resize 760 0 and -resize 2000 0)
+     * 3. Add an entry to /photos/manifest.json with:
+     *    - "file":     full-size filename (e.g. "aurora.jpg")
      *    - "title":    display title (optional)
      *    - "location": where it was taken (optional)
      *    - "date":     "YYYY-MM" format (optional, used for sorting)
      *    - "category": e.g. "astrophotography", "landscape", "travel" (optional)
+     *    - "w" / "h":  source pixel dimensions (optional, prevents layout shift)
      */
 
     let allPhotos = [];
-    let filtered = [];
+    let displayed = [];   // flat, ordered list currently shown — drives lightbox nav
     let currentIndex = 0;
+
+    const baseName = f => f.replace(/\.[^.]+$/, '');
+    const thumbSrc = p => `photos/thumb/${baseName(p.file)}.webp`;
+    const mediumSrc = p => `photos/medium/${baseName(p.file)}.webp`;
+    const fullSrc = p => `photos/${p.file}`;
+
+    const revealer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
 
     async function loadGallery() {
       const res = await fetch('photos/manifest.json');
@@ -383,9 +473,10 @@
     }
 
     function renderGallery(filter) {
-      filtered = filter === 'all' ? allPhotos : allPhotos.filter(p => p.category === filter);
+      const filtered = filter === 'all' ? allPhotos : allPhotos.filter(p => p.category === filter);
       const gallery = document.getElementById('gallery');
       gallery.innerHTML = '';
+      displayed = [];   // rebuilt in display order so lightbox nav matches what's on screen
 
       if (filtered.length === 0) {
         gallery.innerHTML = `
@@ -409,15 +500,13 @@
           const section = document.createElement('div');
           section.className = 'photo-section';
           section.innerHTML = `<p class="photo-category-label">${cat}</p>`;
-          const grid = buildGrid(photos);
-          section.appendChild(grid);
+          section.appendChild(buildGrid(photos));
           gallery.appendChild(section);
         });
       } else {
         const section = document.createElement('div');
         section.className = 'photo-section';
-        const grid = buildGrid(filtered);
-        section.appendChild(grid);
+        section.appendChild(buildGrid(filtered));
         gallery.appendChild(section);
       }
     }
@@ -425,12 +514,14 @@
     function buildGrid(photos) {
       const grid = document.createElement('div');
       grid.className = 'photo-grid';
-      photos.forEach((photo, i) => {
-        const idx = allPhotos.indexOf(photo);
+      photos.forEach(photo => {
+        const idx = displayed.push(photo) - 1;   // index into the flat displayed list
         const card = document.createElement('div');
         card.className = 'photo-card';
         card.innerHTML = `
-          <img src="photos/${photo.file}" alt="${photo.title || ''}" loading="lazy" />
+          <img src="${thumbSrc(photo)}" alt="${photo.title || photo.location || 'Photograph'}"
+               ${photo.w && photo.h ? `width="${photo.w}" height="${photo.h}"` : ''}
+               loading="lazy" decoding="async" />
           <div class="photo-card-overlay">
             <div class="photo-card-info">
               ${photo.title ? `<div class="photo-card-title">${photo.title}</div>` : ''}
@@ -439,49 +530,71 @@
           </div>`;
         card.addEventListener('click', () => openLightbox(idx));
         grid.appendChild(card);
+        revealer.observe(card);
       });
       return grid;
     }
 
+    const lightbox = document.getElementById('lightbox');
+    const stage = document.getElementById('lightbox-stage');
+    const lbImg = document.getElementById('lightbox-img');
+
     function openLightbox(index) {
       currentIndex = index;
       updateLightbox();
-      document.getElementById('lightbox').classList.add('open');
+      lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
 
     function closeLightbox() {
-      document.getElementById('lightbox').classList.remove('open');
+      lightbox.classList.remove('open');
       document.body.style.overflow = '';
     }
 
+    function step(dir) {
+      if (displayed.length < 2) return;
+      currentIndex = (currentIndex + dir + displayed.length) % displayed.length;
+      updateLightbox();
+    }
+
     function updateLightbox() {
-      const p = allPhotos[currentIndex];
-      document.getElementById('lightbox-img').src = `photos/${p.file}`;
-      document.getElementById('lightbox-img').alt = p.title || '';
+      const p = displayed[currentIndex];
+      const onlyOne = displayed.length < 2;
+      document.getElementById('lb-prev').style.display = onlyOne ? 'none' : '';
+      document.getElementById('lb-next').style.display = onlyOne ? 'none' : '';
+
+      stage.classList.add('loading');
+      lbImg.onload = () => stage.classList.remove('loading');
+      lbImg.src = mediumSrc(p);
+      lbImg.alt = p.title || p.location || 'Photograph';
+
+      document.getElementById('lb-count').textContent =
+        onlyOne ? '' : `${String(currentIndex + 1).padStart(2, '0')} / ${String(displayed.length).padStart(2, '0')}`;
       document.getElementById('lb-title').textContent = p.title || '';
       document.getElementById('lb-meta').textContent = [p.location, p.date].filter(Boolean).join(' · ');
       document.getElementById('lb-exif').textContent = [p.camera, p.exif].filter(Boolean).join(' — ');
     }
 
     document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
-    document.getElementById('lightbox').addEventListener('click', e => {
-      if (e.target === document.getElementById('lightbox')) closeLightbox();
-    });
-    document.getElementById('lb-prev').addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + allPhotos.length) % allPhotos.length;
-      updateLightbox();
-    });
-    document.getElementById('lb-next').addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % allPhotos.length;
-      updateLightbox();
-    });
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.getElementById('lb-prev').addEventListener('click', () => step(-1));
+    document.getElementById('lb-next').addEventListener('click', () => step(1));
     document.addEventListener('keydown', e => {
-      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (!lightbox.classList.contains('open')) return;
       if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') { currentIndex = (currentIndex - 1 + allPhotos.length) % allPhotos.length; updateLightbox(); }
-      if (e.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % allPhotos.length; updateLightbox(); }
+      if (e.key === 'ArrowLeft') step(-1);
+      if (e.key === 'ArrowRight') step(1);
     });
+
+    // touch swipe on mobile
+    let touchX = null;
+    stage.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+    stage.addEventListener('touchend', e => {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+      touchX = null;
+    }, { passive: true });
 
     loadGallery();
   </script>
