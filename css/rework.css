@@ -146,14 +146,9 @@ section{position:relative}
 .focus-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,80px);align-items:center}
 @media(max-width:860px){.focus-grid{grid-template-columns:1fr;gap:40px}}
 .focus-visual{aspect-ratio:4/3;border-radius:20px;border:1px solid var(--line);position:relative;overflow:hidden;
-  background:radial-gradient(120% 120% at 70% 20%,color-mix(in oklch,var(--accent) 22%,var(--bg-2)),var(--bg-2));}
-.focus-visual .orbit{position:absolute;inset:0;display:grid;place-items:center}
-.focus-visual .planet{width:34%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 32% 30%,var(--accent-2),var(--accent) 55%,oklch(0.30 0.08 270) 100%);box-shadow:0 0 60px var(--glow)}
-.focus-visual .ring{position:absolute;border:1px solid color-mix(in oklch,var(--ink) 22%,transparent);border-radius:50%;animation:spin 26s linear infinite}
-.focus-visual .ring.r1{width:62%;aspect-ratio:1}
-.focus-visual .ring.r2{width:86%;aspect-ratio:1;animation-duration:40s;animation-direction:reverse;border-style:dashed}
-.focus-visual .label{position:absolute;left:18px;bottom:16px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);background:color-mix(in oklch,var(--bg) 55%,transparent);padding:5px 11px;border-radius:99px;backdrop-filter:blur(8px)}
-@keyframes spin{to{transform:rotate(360deg)}}
+  background:radial-gradient(130% 130% at 78% 18%,color-mix(in oklch,var(--accent) 16%,var(--bg-2)),var(--bg) 78%);}
+.focus-visual #magneto{position:absolute;inset:0;width:100%;height:100%;display:block}
+.focus-visual .label{position:absolute;left:18px;bottom:16px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);background:color-mix(in oklch,var(--bg) 55%,transparent);padding:5px 11px;border-radius:99px;backdrop-filter:blur(8px);z-index:2}
 .focus-text h2{font-family:var(--display);font-weight:700;font-size:clamp(30px,4.5vw,52px);line-height:1.04;letter-spacing:-0.025em;margin:18px 0 22px}
 .focus-text p{font-size:18.5px;color:var(--ink-2);max-width:50ch}
 .focus-text p strong{color:var(--ink);font-weight:600}

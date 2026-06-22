@@ -112,6 +112,196 @@
     });
   }
 
+  /* ---------- magnetosphere: solar wind deflecting around a shielded planet ---------- */
+  var mag = document.getElementById('magneto');
+  if (mag) {
+    var mctx = mag.getContext('2d');
+    var mw, mh, mdpr = Math.min(window.devicePixelRatio || 1, 2);
+    var parts = [], sparks = [], bgStars = [], px, py, pr, running = false, rafId = 0, tms = 0;
+    var auroraN = 0, auroraS = 0; // polar glow charge (decays)
+    function accent() {
+      return root.getAttribute('data-theme') === 'light'
+        ? { wind: 'oklch(0.55 0.16 250', core: 'oklch(0.58 0.14 215', shield: 'oklch(0.54 0.16 250', hot: 'oklch(0.62 0.20 25', star: 'oklch(0.6 0.05 250' }
+        : { wind: 'oklch(0.82 0.13 200', core: 'oklch(0.72 0.135 240', shield: 'oklch(0.80 0.13 200', hot: 'oklch(0.78 0.18 30', star: 'oklch(0.9 0.03 240' };
+    }
+    function msize() {
+      var r = mag.getBoundingClientRect();
+      mw = mag.width = Math.max(1, r.width) * mdpr;
+      mh = mag.height = Math.max(1, r.height) * mdpr;
+      px = mw * 0.66; py = mh * 0.5; pr = Math.min(mw, mh) * 0.135;
+      var n = reduce ? 40 : Math.min(170, Math.floor(mw / 6));
+      parts = Array.from({ length: n }, mkPart);
+      bgStars = Array.from({ length: reduce ? 0 : Math.floor(mw * mh / (14000 * mdpr)) }, function () {
+        return { x: Math.random() * mw, y: Math.random() * mh, r: Math.random() * 1.1 * mdpr + 0.2, a: Math.random() * 0.5 + 0.1, tw: Math.random() * 0.02 + 0.003 };
+      });
+    }
+    function mkPart(reset) {
+      var spd = 0.6 + Math.random() * 1.0;
+      return {
+        x: reset ? -Math.random() * mw * 0.5 : Math.random() * mw,
+        y: Math.random() * mh,
+        v: spd * mdpr,
+        len: (8 + Math.random() * 30) * mdpr,
+        a: 0.25 + Math.random() * 0.5,
+        hot: Math.random() < 0.22,   // some high-energy particles (warm color)
+        hit: false
+      };
+    }
+    // dipole field line: rho = L*sin^2(theta), axis vertical, on a given side
+    function fieldLine(L, side, squash, stretch) {
+      mctx.beginPath();
+      for (var th = 0.001; th <= Math.PI; th += 0.13) {
+        var rho = L * Math.sin(th) * Math.sin(th);
+        var fx = px + rho * Math.sin(th) * side * squash;
+        var fy = py - rho * Math.cos(th) * stretch;
+        if (th < 0.14) mctx.moveTo(fx, fy); else mctx.lineTo(fx, fy);
+      }
+      mctx.stroke();
+    }
+    function mstep() {
+      rafId = requestAnimationFrame(mstep);
+      tms += 0.016;
+      mctx.clearRect(0, 0, mw, mh);
+      var col = accent();
+      var breathe = 1 + Math.sin(tms * 0.9) * 0.05;
+      var shieldR = pr * 2.55 * breathe;
+
+      // background micro-stars
+      for (var b = 0; b < bgStars.length; b++) {
+        var st = bgStars[b];
+        mctx.beginPath();
+        mctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+        mctx.fillStyle = col.star + ' / ' + Math.max(0.04, st.a + Math.sin(tms * 60 * st.tw) * 0.2).toFixed(2) + ')';
+        mctx.fill();
+      }
+
+      // magnetotail — stretched field on the night (right) side
+      mctx.strokeStyle = col.shield + ' / 0.13)';
+      mctx.lineWidth = 1 * mdpr;
+      for (var ti = 0; ti < 2; ti++) {
+        var ty = py + (ti ? 1 : -1) * pr * 0.7;
+        mctx.beginPath();
+        mctx.moveTo(px, ty);
+        mctx.bezierCurveTo(px + pr * 2, ty + (ti ? 1 : -1) * pr * 0.2, px + pr * 4.5, ty + (ti ? 1 : -1) * pr * 0.1, mw + 20, ty + (ti ? 1 : -1) * pr * 0.5);
+        mctx.stroke();
+      }
+
+      // dipole field lines (compressed on sun side, stretched on night side)
+      for (var li = 0; li < 3; li++) {
+        var L = pr * (1.7 + li * 0.95);
+        mctx.strokeStyle = col.shield + ' / ' + (0.30 - li * 0.07).toFixed(2) + ')';
+        mctx.lineWidth = (1.3 - li * 0.25) * mdpr;
+        fieldLine(L, -1, 0.72, 1);          // sun side, compressed
+        fieldLine(L, 1, 1.05 + li * 0.25, 1); // night side, flared
+      }
+
+      // magnetopause bow shock
+      mctx.beginPath();
+      for (var t = -1.3; t <= 1.3; t += 0.04) {
+        var ax = px - Math.cos(t) * shieldR * 1.18 + shieldR * 0.16;
+        var ay = py + Math.sin(t) * shieldR * 1.55;
+        if (t === -1.3) mctx.moveTo(ax, ay); else mctx.lineTo(ax, ay);
+      }
+      mctx.strokeStyle = col.shield + ' / 0.22)';
+      mctx.lineWidth = 1.2 * mdpr;
+      mctx.stroke();
+
+      // solar wind particles
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i];
+        var dx = p.x - px, dy = p.y - py;
+        var dist = Math.hypot(dx, dy);
+        if (dist < shieldR) {
+          var f = (shieldR - dist) / shieldR;
+          p.y += (dy / (dist || 1)) * f * 3.8 * mdpr;
+          p.x += (dx / (dist || 1)) * f * 1.3 * mdpr;
+          // impact near the nose of the magnetopause → spark + aurora charge
+          if (!p.hit && dist < shieldR * 0.62 && p.x < px) {
+            p.hit = true;
+            if (sparks.length < 60) {
+              for (var s = 0; s < 3; s++) sparks.push({ x: p.x, y: p.y, vx: (Math.random() - 0.3) * 2 * mdpr, vy: (Math.random() - 0.5) * 3 * mdpr, life: 1, hot: p.hot });
+            }
+            if (p.y < py) auroraN = Math.min(1, auroraN + 0.12); else auroraS = Math.min(1, auroraS + 0.12);
+          }
+        }
+        p.x += p.v;
+        var streak = Math.min(p.len, p.v * 9);
+        var grad = mctx.createLinearGradient(p.x - streak, p.y, p.x, p.y);
+        var base = p.hot ? col.hot : col.wind;
+        grad.addColorStop(0, base + ' / 0)');
+        grad.addColorStop(1, base + ' / ' + p.a.toFixed(2) + ')');
+        mctx.strokeStyle = grad;
+        mctx.lineWidth = (p.hot ? 1.8 : 1.3) * mdpr;
+        mctx.beginPath();
+        mctx.moveTo(p.x - streak, p.y);
+        mctx.lineTo(p.x, p.y);
+        mctx.stroke();
+        if (p.x - streak > mw + 10) { parts[i] = mkPart(true); }
+      }
+
+      // impact sparks
+      for (var si = sparks.length - 1; si >= 0; si--) {
+        var sp = sparks[si];
+        sp.x += sp.vx; sp.y += sp.vy; sp.vy += 0.04 * mdpr; sp.life -= 0.045;
+        if (sp.life <= 0) { sparks.splice(si, 1); continue; }
+        mctx.beginPath();
+        mctx.arc(sp.x, sp.y, 1.6 * mdpr * sp.life + 0.4, 0, Math.PI * 2);
+        mctx.fillStyle = (sp.hot ? col.hot : col.shield) + ' / ' + sp.life.toFixed(2) + ')';
+        mctx.fill();
+      }
+
+      // planet magnetosphere glow
+      var g = mctx.createRadialGradient(px - pr * 0.3, py - pr * 0.3, pr * 0.1, px, py, pr * 2.6);
+      g.addColorStop(0, col.core + ' / 0.5)');
+      g.addColorStop(1, col.core + ' / 0)');
+      mctx.fillStyle = g;
+      mctx.beginPath(); mctx.arc(px, py, pr * 2.6, 0, Math.PI * 2); mctx.fill();
+
+      // planet body with day/night terminator (lit toward the sun, left)
+      var bg2 = mctx.createRadialGradient(px - pr * 0.55, py - pr * 0.2, pr * 0.1, px, py, pr * 1.05);
+      bg2.addColorStop(0, col.core + ' / 1)');
+      bg2.addColorStop(0.6, col.shield + ' / 0.9)');
+      bg2.addColorStop(1, 'oklch(0.22 0.05 270 / 0.96)');
+      mctx.fillStyle = bg2;
+      mctx.beginPath(); mctx.arc(px, py, pr, 0, Math.PI * 2); mctx.fill();
+
+      // polar aurora caps (flare on impact, then decay)
+      auroraN *= 0.965; auroraS *= 0.965;
+      function aurora(yy, charge, dir) {
+        if (charge < 0.02) return;
+        mctx.save();
+        mctx.beginPath();
+        mctx.ellipse(px, yy, pr * 0.5, pr * 0.22, 0, 0, Math.PI * 2);
+        var ag = mctx.createRadialGradient(px, yy, 0, px, yy, pr * 0.6);
+        ag.addColorStop(0, col.shield + ' / ' + (0.55 * charge).toFixed(2) + ')');
+        ag.addColorStop(1, col.shield + ' / 0)');
+        mctx.fillStyle = ag;
+        mctx.fill();
+        mctx.restore();
+      }
+      aurora(py - pr * 0.78, auroraN, -1);
+      aurora(py + pr * 0.78, auroraS, 1);
+
+      // sun-facing shield arc
+      mctx.beginPath();
+      mctx.arc(px, py, pr * 1.45, Math.PI * 0.58, Math.PI * 1.42, false);
+      mctx.strokeStyle = col.shield + ' / ' + (0.45 + Math.sin(tms * 1.6) * 0.12).toFixed(2) + ')';
+      mctx.lineWidth = 2 * mdpr;
+      mctx.stroke();
+
+      if (reduce) { cancelAnimationFrame(rafId); }
+    }
+    msize();
+    window.addEventListener('resize', function () { msize(); });
+    function start() { if (!running) { running = true; mstep(); } }
+    function stop() { if (running) { running = false; cancelAnimationFrame(rafId); } }
+    start();
+    var mio = new IntersectionObserver(function (e) {
+      if (e[0].isIntersecting) start(); else stop();
+    }, { threshold: 0.02 });
+    mio.observe(mag);
+  }
+
   /* ---------- starfield (theme-aware, cursor parallax) ---------- */
   var c = document.getElementById('stars');
   if (c) {
