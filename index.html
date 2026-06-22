@@ -1,374 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nikita Rozanov — Physics &amp; CS</title>
-  <meta name="description" content="Nikita Rozanov — Honours Physics student at McGill University working in high-energy theory and computational simulation. Based in Montréal." />
-  <meta name="author" content="Nikita Rozanov" />
-  <link rel="canonical" href="https://nikitarozanov.com/" />
-  <meta name="theme-color" content="#1a3d8f" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){var t;try{t=localStorage.getItem('nr-theme');}catch(e){}if(t!=='light'&&t!=='dark')t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<title>Nikita Rozanov — Physicist &amp; Programmer</title>
+<meta name="description" content="Nikita Rozanov — Honours Physics at McGill working in computational simulation and space weather, with a deep interest in astrophysics. Based in Montréal." />
+<meta name="author" content="Nikita Rozanov" />
+<link rel="canonical" href="https://nikitarozanov.com/" />
+<meta name="theme-color" content="#16171d" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 
-  <!-- Favicon -->
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<!-- Open Graph / social share -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Nikita Rozanov" />
+<meta property="og:title" content="Nikita Rozanov — Physicist &amp; Programmer" />
+<meta property="og:description" content="Honours Physics at McGill working in computational simulation and space weather, with a deep interest in astrophysics." />
+<meta property="og:url" content="https://nikitarozanov.com/" />
+<meta property="og:image" content="https://nikitarozanov.com/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Nikita Rozanov — Physicist &amp; Programmer" />
+<meta name="twitter:description" content="Honours Physics at McGill working in computational simulation and space weather." />
+<meta name="twitter:image" content="https://nikitarozanov.com/assets/og.png" />
 
-  <!-- Open Graph / social share -->
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Nikita Rozanov" />
-  <meta property="og:title" content="Nikita Rozanov — Physics &amp; CS" />
-  <meta property="og:description" content="Honours Physics student at McGill University working in high-energy theory and computational simulation." />
-  <meta property="og:url" content="https://nikitarozanov.com/" />
-  <meta property="og:image" content="https://nikitarozanov.com/assets/og.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Nikita Rozanov — Physics &amp; CS" />
-  <meta name="twitter:description" content="Honours Physics student at McGill University working in high-energy theory and computational simulation." />
-  <meta name="twitter:image" content="https://nikitarozanov.com/assets/og.png" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <script>document.documentElement.dataset.theme=localStorage.getItem('theme')||'light'</script>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/animations.css" />
-  <!-- Without JS the scroll-reveal never fires; keep all content visible -->
-  <noscript><style>.reveal{opacity:1 !important;transform:none !important;}</style></noscript>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/rework.css">
+<!-- Without JS the scroll-reveal never fires; keep all content visible -->
+<noscript><style>.reveal,.statement .line{opacity:1 !important;transform:none !important;}</style></noscript>
 </head>
 <body>
+<div class="scroll-prog" id="scrollProg"></div>
 
-  <!-- READING PROGRESS -->
-  <div id="progress-bar"></div>
+<nav>
+  <div class="nav-in">
+    <a href="#top" class="brand"><span class="mk"></span>Nikita Rozanov</a>
+    <div class="nav-links">
+      <a href="#work" class="txt">Work</a>
+      <a href="#about" class="txt">About</a>
+      <a href="#path" class="txt">Path</a>
+      <div class="nav-dd">
+        <a href="#photography" class="txt dd-trigger">Photography
+          <svg class="chev" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="dd-menu">
+          <span class="sub">Photography</span>
+          <a href="#photography">On this page</a>
+          <a href="photography.html">Full gallery ↗</a>
+        </div>
+      </div>
+      <a href="#contact" class="txt">Contact</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark mode" title="Toggle theme">
+        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
 
-  <!-- NAV -->
-  <nav id="navbar">
-    <a href="#hero" class="nav-logo">N. Rozanov</a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li class="nav-sep" aria-hidden="true"></li>
-      <li><a href="photography.html" class="nav-external">Photography ↗</a></li>
-    </ul>
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"></button>
-    <button class="burger" id="burger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+<!-- HERO -->
+<header class="hero" id="top">
+  <canvas id="stars"></canvas>
+  <div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap hero-inner">
+    <span class="eyebrow rise" style="animation-delay:.05s"><span class="dot"></span><span class="mono">Honours Physics · McGill University</span></span>
+    <h1>
+      <span class="ln rise" style="animation-delay:.12s">Nikita</span>
+      <span class="ln rise" style="animation-delay:.22s">Rozanov.</span>
+    </h1>
+    <p class="sub rise" style="animation-delay:.44s">A <b>physics student at McGill</b>, working in computational simulation and space weather — with a deep interest in astrophysics. Based in Montréal.</p>
+    <div class="cta rise" style="animation-delay:.54s">
+      <a href="#contact" class="btn primary">Get in touch <span class="arr">→</span></a>
+      <a href="#about" class="btn ghost">About me</a>
+    </div>
+  </div>
+  <div class="scrollcue"><span class="mono" style="font-size:10px">Scroll</span><span class="bar"></span></div>
+</header>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-left">
-      <p class="hero-label">Honours Physics &middot; McGill University</p>
-      <h1>Nikita<br><em>Rozanov</em></h1>
-      <p class="hero-desc">
-        Physicist and programmer exploring the intersection of high-energy theory and
-        computational simulation. Based in Montr&eacute;al.
-      </p>
-      <div class="hero-ctas">
-        <a href="#contact" class="btn btn-fill">Get in touch</a>
-        <a href="#about" class="btn">Learn more</a>
+<!-- STATEMENT -->
+<section class="statement">
+  <div class="wrap">
+    <p class="big">
+      <span class="line">I'm a student of physics,</span>
+      <span class="line">drawn to how the universe works —</span>
+      <span class="line">from <span class="accent">simulation</span></span>
+      <span class="line">to the weather of <span class="accent">space.</span></span>
+    </p>
+  </div>
+</section>
+
+<!-- FOCUS / CURRENT -->
+<section class="band" id="work">
+  <div class="wrap">
+    <div class="focus-grid">
+      <div class="focus-visual reveal">
+        <div class="orbit">
+          <div class="ring r2"></div>
+          <div class="ring r1"></div>
+          <div class="planet"></div>
+        </div>
+        <span class="label">space-weather model · live</span>
+      </div>
+      <div class="focus-text">
+        <span class="kicker reveal"><span class="mono">Currently</span><span class="ln"></span></span>
+        <h2 class="reveal">Modelling how the Sun shakes our satellites.</h2>
+        <p class="reveal">As a <strong>Physics Research Intern at Mission Space</strong>, a Luxembourg-based aerospace company, I work on physics research and modelling for spacecraft systems — quantifying how space-weather events disturb hardware in orbit.</p>
+        <div class="live reveal"><span class="d"></span>Mar 2026 — Present · Remote</div>
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="hero-right">
-      <div class="particle-wrap">
-        <canvas id="particleCanvas"></canvas>
+<!-- STATS -->
+<section class="band" style="padding-top:0">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat reveal"><div class="v">U1</div><div class="k">Year · McGill University</div></div>
+      <div class="stat reveal"><div class="v">IB<span>·</span></div><div class="k">Graduated with Distinction</div></div>
+      <div class="stat reveal"><div class="v">Astro</div><div class="k">Astrophysics &amp; space weather</div></div>
+      <div class="stat reveal"><div class="v">2</div><div class="k">Languages · EN / RU</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="band" id="about">
+  <div class="wrap">
+    <span class="kicker reveal"><span class="mono">01 — About</span><span class="ln"></span></span>
+    <div class="about-grid">
+      <div>
+        <p class="reveal">I'm a <strong>second-year Honours Physics student</strong> at <a class="inl" href="https://www.mcgill.ca" target="_blank" rel="noopener">McGill University</a>, considering a joint Honours in Physics and Computer Science. I'm especially <strong>drawn to astrophysics and computational physics</strong> — using simulation and data to make sense of physical systems, from spacecraft in orbit to objects in the night sky.</p>
+        <p class="reveal">Before McGill I studied at <a class="inl" href="https://www.aiglon.ch" target="_blank" rel="noopener">Aiglon College</a> in the Swiss Alps, graduating with Honours and Distinction in the IB and a departmental award in Computer Science.</p>
+        <p class="reveal">Outside of physics I ski, scuba dive, and shoot photography — from dark-sky astrophotography to everyday moments wherever I travel.</p>
       </div>
-      <p class="hero-caption">ψ(x,t) — coherent state of a quantum harmonic oscillator. <span class="accent">Move your cursor to perturb it.</span></p>
-      <div class="hero-stats">
-        <div class="stat">
-          <div class="stat-num">U1</div>
-          <div class="stat-label">McGill Year</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">IB</div>
-          <div class="stat-label">Distinction</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">HEP</div>
-          <div class="stat-label">Research Focus</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">2</div>
-          <div class="stat-label">Languages</div>
+      <div class="tags-side reveal">
+        <h4>Research interests</h4>
+        <div class="row">
+          <span class="pill">Astrophysics</span>
+          <span class="pill">Quantum mechanics</span>
+          <span class="pill">Numerical simulation</span>
+          <span class="pill">Space weather</span>
+          <span class="pill">Cosmology</span>
+          <span class="pill">Statistical analysis</span>
+          <span class="pill">Observational astronomy</span>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <main>
-
-    <!-- ABOUT -->
-    <section id="about">
-      <div class="section-header reveal">
-        <span class="section-num">01</span>
-        <h2>About</h2>
-      </div>
-      <div class="about-grid">
-        <div class="about-text reveal">
-          <p class="lede">
-            I'm a <strong>second-year Honours Physics student</strong> at <a href="https://www.mcgill.ca" target="_blank" rel="noopener">McGill University</a>,
-            considering a joint Honours in Physics and Computer Science. My academic interest
-            centres on <strong>high-energy and particle physics</strong>, particularly the
-            theoretical and computational tools used to model quantum chromodynamics and
-            heavy-ion collisions.
-          </p>
-          <p>
-            Before McGill, I attended
-            <a href="https://www.aiglon.ch" target="_blank" rel="noopener"><strong>Aiglon College in Switzerland</strong></a>, where I graduated with Honours
-            and Distinction in the IB, earning a departmental award in Computer Science.
-          </p>
-          <p>
-            Outside of physics I enjoy skiing, astrophotography, and exploring new places.
-          </p>
+<!-- PATH: education + experience -->
+<section class="band" id="path">
+  <div class="wrap">
+    <span class="kicker reveal"><span class="mono">02 — Path</span><span class="ln"></span></span>
+    <h2 class="section-title reveal" style="margin-bottom:46px">Education &amp; <em>experience</em></h2>
+    <div class="tl">
+      <div class="tl-row reveal">
+        <div class="tl-when">Mar 2026 — Present<br>Luxembourg · Remote</div>
+        <div class="tl-main">
+          <h3>Mission Space</h3>
+          <div class="deg">Physics Research Intern</div>
+          <p>Physics research and modelling for spacecraft systems with a Luxembourg-based aerospace company, focused on space-weather effects.</p>
         </div>
-        <div class="reveal">
-          <p class="sub-label">Research Interests</p>
-          <ul class="interests-list">
-            <li>High-energy &amp; particle physics</li>
-            <li>Quantum Mechanics</li>
-            <li>Numerical simulation methods</li>
-            <li>Cosmology</li>
-            <li>Statistical data analysis</li>
-            <li>Astrophotography &amp; observational astronomy</li>
-          </ul>
-        </div>
+        <span class="chip">Active</span>
       </div>
-    </section>
-
-    <!-- EDUCATION -->
-    <section id="education" class="tint">
-      <div class="section-header reveal">
-        <span class="section-num">02</span>
-        <h2>Education</h2>
-      </div>
-
-      <div class="edu-item reveal">
-        <div class="edu-main">
-          <p class="edu-school"><a href="https://www.mcgill.ca" target="_blank" rel="noopener">McGill University</a></p>
-          <p class="edu-degree">B.Sc. (Honours) Physics</p>
-          <p class="edu-details">
-            Exploring joint Honours in Physics &amp; Computer Science. Coursework includes
-            Honours Classical Mechanics, Ordinary Differential Equations, Complex Variables,
-            Signal Processing, and Discrete Mathematics.
-          </p>
-          <span class="edu-badge edu-badge--red">Active</span>
+      <div class="tl-row reveal">
+        <div class="tl-when">Sep 2024 — Jun 2028<br>Montréal, Canada</div>
+        <div class="tl-main">
+          <h3>McGill University</h3>
+          <div class="deg">B.Sc. (Honours) Physics</div>
+          <p>Exploring a joint Honours in Physics &amp; Computer Science. Coursework: Honours Classical Mechanics, ODEs, Complex Variables, Signal Processing, Discrete Mathematics.</p>
         </div>
-        <div class="edu-dates">Sep 2024 &ndash; Jun 2028<br>Montr&eacute;al, Canada</div>
+        <span class="chip">Enrolled</span>
       </div>
-
-      <div class="edu-item reveal">
-        <div class="edu-main">
-          <p class="edu-school"><a href="https://www.aiglon.ch" target="_blank" rel="noopener">Aiglon College</a></p>
-          <p class="edu-degree">IGCSE &amp; International Baccalaureate (IB)</p>
-          <p class="edu-details">
-            Graduated with Honours and Distinction. Departmental prize in Computer Science.
-            HL subjects: Physics, Mathematics: Analysis &amp; Approaches, Computer Science.
-          </p>
-          <span class="edu-badge">Honours &amp; Distinction</span>
+      <div class="tl-row reveal">
+        <div class="tl-when">Sep 2020 — Jun 2024<br>Switzerland</div>
+        <div class="tl-main">
+          <h3>Aiglon College</h3>
+          <div class="deg">IGCSE &amp; International Baccalaureate</div>
+          <p>Graduated with Honours and Distinction. Departmental prize in Computer Science. HL: Physics, Mathematics AA, Computer Science.</p>
         </div>
-        <div class="edu-dates">Sep 2020 &ndash; Jun 2024<br>Switzerland</div>
+        <span class="chip">Distinction</span>
       </div>
+    </div>
+  </div>
+</section>
 
-    </section>
+<!-- SKILLS -->
+<section class="band" style="padding-top:0">
+  <div class="wrap">
+    <span class="kicker reveal"><span class="mono">03 — Toolkit</span><span class="ln"></span></span>
+    <div class="skills-grid">
+      <div class="skill-block reveal"><h4>Programming &amp; libraries</h4><div class="row"><span class="pill">Python</span><span class="pill">NumPy</span><span class="pill">SciPy</span><span class="pill">pandas</span><span class="pill">Matplotlib</span></div></div>
+      <div class="skill-block reveal"><h4>Tools &amp; typesetting</h4><div class="row"><span class="pill">Git</span><span class="pill">LaTeX</span><span class="pill">SQLite</span><span class="pill">Overleaf</span></div></div>
+      <div class="skill-block reveal"><h4>Methods</h4><div class="row"><span class="pill">Data Analysis</span><span class="pill">Statistical Inference</span><span class="pill">Numerical Simulation</span></div></div>
+      <div class="skill-block reveal"><h4>Concepts</h4><div class="row"><span class="pill">Classical Mechanics</span><span class="pill">Quantum Mechanics</span><span class="pill">Complex Analysis</span><span class="pill">ODEs</span><span class="pill">Vector Calculus</span><span class="pill">Linear Algebra</span></div></div>
+    </div>
+  </div>
+</section>
 
-    <!-- EXPERIENCE -->
-    <section id="experience">
-      <div class="section-header reveal">
-        <span class="section-num">03</span>
-        <h2>Experience</h2>
+<!-- PROJECTS -->
+<section class="band" style="padding-top:0">
+  <div class="wrap">
+    <span class="kicker reveal"><span class="mono">04 — Projects</span><span class="ln"></span></span>
+    <h2 class="section-title reveal" style="margin-bottom:40px">Selected <em>work</em></h2>
+    <div class="proj-grid">
+      <article class="proj reveal">
+        <div class="yr">2026</div>
+        <h3>Pendulum &amp; Spring Simulation</h3>
+        <p>An interactive physics engine in Python for the McGill Physics Hackathon, simulating coupled pendulum and spring dynamics in real time with accurate numerical integration of the equations of motion.</p>
+        <div class="row"><span class="chip">Python</span><span class="chip">Numerical Methods</span><span class="chip">Game Physics</span></div>
+      </article>
+      <article class="proj reveal">
+        <div class="yr">2024</div>
+        <h3>Game Design Club</h3>
+        <p>Led cross-year game development projects as Head of the Game Design Club, coordinating teams and teaching Python and OOP fundamentals to junior students.</p>
+        <div class="row"><span class="chip">Python</span><span class="chip">OOP</span><span class="chip">Team Leadership</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- HORIZONTAL PHOTOGRAPHY GALLERY -->
+<section class="gallery" id="photography">
+  <div class="gallery-pin">
+    <div class="gallery-head">
+      <div>
+        <span class="kicker"><span class="mono">05 — Photography</span><span class="ln"></span></span>
+        <h2 class="section-title">Late nights under <em>the stars</em></h2>
       </div>
+      <a href="photography.html" class="btn ghost">View collection <span class="arr">↗</span></a>
+    </div>
+    <div class="gallery-track" id="galTrack">
+      <figure class="slide wide"><span class="idx">01</span><span class="cap">astrophotography · milky way</span></figure>
+      <figure class="slide filled"><img src="photos/medium/DSF5827.webp" alt="Montréal street scene" loading="lazy" decoding="async"><span class="idx">02</span><span class="cap">travels · montréal</span></figure>
+      <figure class="slide filled"><img src="photos/medium/DSF5838.webp" alt="Montréal street scene" loading="lazy" decoding="async"><span class="idx">03</span><span class="cap">street · montréal</span></figure>
+      <figure class="slide wide filled"><img src="photos/medium/manta.webp" alt="Manta ray gliding through the blue, Komodo Islands" loading="lazy" decoding="async"><span class="idx">04</span><span class="cap">underwater · komodo</span></figure>
+      <figure class="slide"><span class="idx">05</span><span class="cap">night sky · star trails</span></figure>
+    </div>
+  </div>
+</section>
 
-      <div class="edu-item reveal">
-        <div class="edu-main">
-          <p class="edu-school"><a href="https://mission.space" target="_blank" rel="noopener">Mission Space</a></p>
-          <p class="edu-degree">Physics Research Intern</p>
-          <p class="edu-details">
-            Working remotely with a Luxembourg-based aerospace company on physics research and modelling for spacecraft systems.
-          </p>
-          <span class="edu-badge edu-badge--red">Active</span>
-        </div>
-        <div class="edu-dates">Mar 2026 &ndash; Present<br>Luxembourg (Remote)</div>
-      </div>
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <span class="kicker reveal"><span class="mono">06 — Contact</span><span class="ln"></span></span>
+    <h2 class="reveal">Let's <em>talk.</em></h2>
+    <p class="blurb reveal">Open to research collaborations and conversations about astrophysics, scientific computing, or aerospace.</p>
+    <div class="links reveal">
+      <a href="mailto:roznik2020@gmail.com"><span class="lbl">Email</span><span class="val">roznik2020@gmail.com ↗</span></a>
+      <a href="https://www.linkedin.com/in/roznik20/" target="_blank" rel="noopener"><span class="lbl">LinkedIn</span><span class="val">/in/roznik20 ↗</span></a>
+      <a href="https://github.com/roznik20" target="_blank" rel="noopener"><span class="lbl">GitHub</span><span class="val">/roznik20 ↗</span></a>
+      <a href="tel:+12633627797"><span class="lbl">Phone</span><span class="val">+1 (263) 362-7797 ↗</span></a>
+    </div>
+  </div>
+</section>
 
-    </section>
+<footer>
+  <div class="wrap foot-in">
+    <span class="mono">© 2026 Nikita Rozanov</span>
+    <span class="mono">McGill University · Montréal, Canada</span>
+  </div>
+</footer>
 
-    <!-- SKILLS -->
-    <section id="skills" class="tint">
-      <div class="section-header reveal">
-        <span class="section-num">04</span>
-        <h2>Skills</h2>
-      </div>
-      <div class="skills-grid">
-
-        <div class="skill-card reveal">
-          <p class="skill-card-title">Programming</p>
-          <div class="tags">
-            <span class="tag">Python</span>
-          </div>
-        </div>
-
-        <div class="skill-card reveal">
-          <p class="skill-card-title">Scientific Libraries</p>
-          <div class="tags">
-            <span class="tag">NumPy</span>
-            <span class="tag">SciPy</span>
-            <span class="tag">pandas</span>
-            <span class="tag">Matplotlib</span>
-          </div>
-        </div>
-
-        <div class="skill-card reveal">
-          <p class="skill-card-title">Tools &amp; Typesetting</p>
-          <div class="tags">
-            <span class="tag">Git</span>
-            <span class="tag">LaTeX</span>
-            <span class="tag">SQLite</span>
-            <span class="tag">Overleaf</span>
-          </div>
-        </div>
-
-        <div class="skill-card reveal">
-          <p class="skill-card-title">Methods</p>
-          <div class="tags">
-            <span class="tag">Data Analysis</span>
-            <span class="tag">Chi-squared Fitting</span>
-            <span class="tag">Statistical Inference</span>
-            <span class="tag">Numerical Simulation</span>
-          </div>
-        </div>
-
-        <div class="skill-card reveal">
-          <p class="skill-card-title">Languages</p>
-          <div class="tags">
-            <span class="tag">English — Fluent</span>
-            <span class="tag">Russian — Fluent</span>
-          </div>
-        </div>
-
-        <div class="skill-card reveal">
-          <p class="skill-card-title">Concepts</p>
-          <div class="tags">
-            <span class="tag">Algorithms</span>
-            <span class="tag">Classical Mechanics</span>
-            <span class="tag">Quantum Mechanics</span>
-            <span class="tag">Complex Analysis</span>
-            <span class="tag">ODE's</span>
-            <span class="tag">advanced and vector calculus</span>
-            <span class="tag">Applied linear algebra</span>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects">
-      <div class="section-header reveal">
-        <span class="section-num">05</span>
-        <h2>Projects</h2>
-      </div>
-      <div class="projects-list">
-
-        <div class="project-item reveal">
-          <span class="project-year">2026</span>
-          <div>
-            <p class="project-title">Physics Hackathon — Pendulum &amp; Spring Simulation</p>
-            <p class="project-desc">
-              Built an interactive physics engine in Python for the McGill Physics Hackathon,
-              simulating coupled pendulum and spring dynamics in real time. Focused on accurate
-              numerical integration of equations of motion.
-            </p>
-            <div class="tags">
-              <span class="tag">Python</span>
-              <span class="tag">Numerical Methods</span>
-              <span class="tag">Game Physics</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="project-item reveal">
-          <span class="project-year">2024</span>
-          <div>
-            <p class="project-title">Game Design Club — Group Projects</p>
-            <p class="project-desc">
-              Led cross-year game development projects as Head of the Game Design Club,
-              coordinating teams and teaching Python and OOP fundamentals to junior students.
-            </p>
-            <div class="tags">
-              <span class="tag">Python</span>
-              <span class="tag">OOP</span>
-              <span class="tag">Team Leadership</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="contact-section">
-      <div class="section-header reveal">
-        <span class="section-num contact-num">06</span>
-        <h2>Contact</h2>
-      </div>
-      <div class="contact-grid">
-        <p class="contact-intro reveal">
-          I'm open to research collaborations and conversations about high-energy physics,
-          scientific computing, or aerospace. Feel free to reach out.
-        </p>
-        <ul class="contact-links reveal">
-          <li>
-            <a href="mailto:roznik2020@gmail.com">
-              <span>
-                <span class="link-type">Email</span><br>
-                roznik2020@gmail.com
-              </span>
-              <span class="link-arrow">&rarr;</span>
-            </a>
-          </li>
-          <li>
-            <a href="https://www.linkedin.com/in/roznik20/" target="_blank" rel="noopener">
-              <span>
-                <span class="link-type">LinkedIn</span><br>
-                linkedin.com/in/roznik20
-              </span>
-              <span class="link-arrow">&rarr;</span>
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/roznik20" target="_blank" rel="noopener">
-              <span>
-                <span class="link-type">GitHub</span><br>
-                github.com/roznik20
-              </span>
-              <span class="link-arrow">&rarr;</span>
-            </a>
-          </li>
-          <li>
-            <a href="tel:+12633627797">
-              <span>
-                <span class="link-type">Phone</span><br>
-                +1 (263) 362-7797
-              </span>
-              <span class="link-arrow">&rarr;</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    <span>&copy; 2026 Nikita Rozanov &middot; McGill University</span>
-    <span>Montr&eacute;al, Canada</span>
-  </footer>
-
-  <script src="js/main.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
